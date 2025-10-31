@@ -35,6 +35,38 @@ def format_point(x):
         x_text = f"x = {x_disp[0]}, y = {x_disp[1]}"
     return x_text
 
+def plot_convergence(all_values, best_idx, args):
+    # Wykres zbieżności algorytmu
+    best_vals = all_values[best_idx]
+    plt.plot(best_vals, label="f_max(x)")
+
+    plt.scatter(len(best_vals) - 1, best_vals[-1], color="red", label="Ostateczne maksimum")
+    plt.axhline(y=max(best_vals), color="gray", linestyle="--", linewidth=0.8)
+
+    plt.legend()
+    plt.xlabel("Iteracja")
+    plt.ylabel("Wartość funkcji")
+    plt.title(f"Zbieżność algorytmu SA (przykład {args.funkcja}.) – najlepszy przebieg")
+    plt.grid(True)
+    plt.show()
+
+    # Wykres porównawczy zbieżności wielu uruchomień
+    for run, result in enumerate(all_values):
+        label = f"Uruchomienie {run + 1}"
+        if run == best_idx:
+            label += "(najlepsze)"
+        plt.plot(result, label=label)
+
+    plt.scatter(len(best_vals) - 1, best_vals[-1], color="red", label="Ostateczne maksimum")
+    plt.axhline(y=max(best_vals), color="gray", linestyle="--", linewidth=0.8)
+
+    plt.legend()
+    plt.xlabel("Iteracja")
+    plt.ylabel("Najlepsza wartość f(x)")
+    plt.title(f"Porównanie zbieżności algorytmu SA w wielu uruchomieniach (przykład {args.funkcja}.)")
+    plt.grid(True)
+    plt.show()
+
 # ---------- ---------- ----------
 # ALGORYTM SYMULOWANEGO WYŻARZANIA
 # ---------- ---------- ----------
@@ -88,6 +120,8 @@ if __name__ == "__main__":
         func = f_chapter4
 
     results = []
+    all_values = []
+
     start_total = time.time()
 
     for run in range(args.runs):
@@ -100,6 +134,7 @@ if __name__ == "__main__":
         end_single = time.time()
 
         results.append((f_best, x_best, improvements))
+        all_values.append(values)
 
         print(f"Uruchomienie nr {run + 1}: f(x) = {f_best:.6f}, {format_point(x_best)}, liczba korekcji = {improvements}, "
               f"czas (dla {args.M} iteracji) = {round(end_single - start_single, 4)} s")
@@ -120,10 +155,5 @@ if __name__ == "__main__":
     print("Czas całkowity:", round(end_total - start_total, 4), "s")
     print(f"Parametry: T_0 = {args.T0}, α = {args.alpha}, k = {args.k}, step = {args.step}, runs = {args.runs}")
 
-    # Wykres z ostatniego przebiegu
-    plt.plot(values)
-    plt.xlabel("Iteracja")
-    plt.ylabel("Wartość funkcji")
-    plt.title(f"Zbieżność algorytmu SA (funkcja z przykładu {args.funkcja}) – ostatni przebieg")
-    plt.grid(True)
-    plt.show()
+    # Wykresy z najlepszego przebiegu
+    plot_convergence(all_values, best_idx, args)
