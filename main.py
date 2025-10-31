@@ -6,7 +6,7 @@ import argparse
 import time
 
 # ---------- ----------
-# FUNKCJE TESTOWE
+# MATEMATYCZNE FUNKCJE TESTOWE
 # ---------- ----------
 
 # Rozdział 3. – przykład 1.
@@ -21,6 +21,19 @@ def f_chapter3(x):
 # Rozdział 4 – przykład 5.
 def f_chapter4(x, y):
     return 21.5 + x * math.sin(4 * math.pi * x) + y * math.sin(20 * math.pi * y)
+
+# ---------- ----------
+# FUNKCJE POMOCNICZE
+# ---------- ----------
+
+def format_point(x):
+    x_disp = np.round(x, 6)
+    x_text = ""
+    if x_disp.size == 1:
+        x_text = f"x = {x_disp.item()}"
+    elif x_disp.size == 2:
+        x_text = f"x = {x_disp[0]}, y = {x_disp[1]}"
+    return x_text
 
 # ---------- ---------- ----------
 # ALGORYTM SYMULOWANEGO WYŻARZANIA
@@ -78,11 +91,18 @@ if __name__ == "__main__":
     start_total = time.time()
 
     for run in range(args.runs):
+        start_single = time.time()
+
         x_best, f_best, values, improvements = simulated_annealing(
             func, bounds, args.T0, args.alpha, args.k, args.M, args.step
         )
+
+        end_single = time.time()
+
         results.append((f_best, x_best, improvements))
-        print(f"Run {run + 1}: f={f_best:.6f}, x={np.round(x_best, 6)}, korekcje={improvements}")
+
+        print(f"Uruchomienie nr {run + 1}: f(x) = {f_best:.6f}, {format_point(x_best)}, liczba korekcji = {improvements}, "
+              f"czas (dla {args.M} iteracji) = {round(end_single - start_single, 4)} s")
 
     end_total = time.time()
 
@@ -91,14 +111,14 @@ if __name__ == "__main__":
     best_idx = np.argmax(f_values)
 
     print("\n=== PODSUMOWANIE ===")
-    print(f"Funkcja z przykładu {args.funkcja}")
-    print("Średnia wartość maksimum:", round(np.mean(f_values), 6))
-    print("Najlepsze maksimum:", round(f_values[best_idx], 6), "dla punktu:", np.round(results[best_idx][1], 6))
+    print(f"Funkcja z przykładu {args.funkcja}.")
+    print("Średnia wartość maksimum: f(x) =", round(np.mean(f_values), 6))
+    print("Najlepsze maksimum: f(x) =", round(f_values[best_idx], 6), "dla punktu: ", format_point(results[best_idx][1]))
     print("Odchylenie standardowe:", round(np.std(f_values), 6))
     print("Średnia liczba korekcji:", int(np.mean([r[2] for r in results])))
     print("Liczba iteracji:", args.M)
     print("Czas całkowity:", round(end_total - start_total, 4), "s")
-    print(f"Parametry: T0={args.T0}, α={args.alpha}, k={args.k}, step={args.step}, runs={args.runs}")
+    print(f"Parametry: T_0 = {args.T0}, α = {args.alpha}, k = {args.k}, step = {args.step}, runs = {args.runs}")
 
     # Wykres z ostatniego przebiegu
     plt.plot(values)
