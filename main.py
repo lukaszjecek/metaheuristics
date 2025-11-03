@@ -119,6 +119,21 @@ if __name__ == "__main__":
         bounds = [(-3, 12), (4.1, 5.8)]
         func = f_chapter4
 
+    if args.T0 <= 0:
+        parser.error("Temperatura początkowa (--T0) musi być dodatnia.")
+
+    if args.alpha < 0 or args.alpha > 1:
+        parser.error("Współczynnik chłodzenia (--alpha) powinien być w przedziale (0, 1).")
+
+    if args.k < 0:
+        parser.error("Współczynnik k (--k) powinien być dodatni.")
+
+    if args.M < 0:
+        parser.error("Współczynnik liczby iteracji M (--M) powinien być dodatni.")
+
+    if args.runs < 0:
+        parser.error("Liczba uruchomień algorytmu (--runs) powininna być dodatnia.")
+
     results = []
     all_values = []
 
@@ -149,7 +164,7 @@ if __name__ == "__main__":
     print(f"Funkcja z przykładu {args.funkcja}.")
     print("Średnia wartość maksimum: f(x) =", round(np.mean(f_values), 6))
     print("Najlepsze maksimum: f(x) =", round(f_values[best_idx], 6), "dla punktu: ", format_point(results[best_idx][1]))
-    print("Odchylenie standardowe:", round(np.std(f_values), 6))
+    print("Odchylenie standardowe wartości funkcji:", round(np.std(f_values), 6))
     print("Średnia liczba korekcji:", int(np.mean([r[2] for r in results])))
     print("Liczba iteracji:", args.M)
     print("Czas całkowity:", round(end_total - start_total, 4), "s")
@@ -157,3 +172,5 @@ if __name__ == "__main__":
 
     # Wykresy z najlepszego przebiegu
     plot_convergence(all_values, best_idx, args)
+
+    # wykres badanej funkcji z zaznaczonym znalezionym punktem
