@@ -172,5 +172,4 @@ if __name__ == "__main__":
 
     # Wykresy z najlepszego przebiegu
     plot_convergence(all_values, best_idx, args)
-
-    # wykres badanej funkcji z zaznaczonym znalezionym punktem
+    
