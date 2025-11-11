@@ -52,6 +52,28 @@ def roulette_selection(population, fitness_values, n_selected=1):
 
     return selected
 
+def one_point_crossover(parent1, parent2):
+    pivot = random.randint(1, len(parent1) - 1)
+    child1 = parent1[:pivot] + parent2[pivot:]
+    child2 = parent2[:pivot] + parent1[pivot:]
+    return child1, child2
+
+def two_point_crossover(parent1, parent2):
+    pivot1, pivot2 = sorted(random.sample(range(1, len(parent1)), 2))
+    child1 = parent1[:pivot1] + parent2[pivot1:pivot2] + parent1[pivot2:]
+    child2 = parent2[:pivot1] + parent1[pivot1:pivot2] + parent2[pivot2:]
+    return child1, child2
+
+def uniform_crossover(parent1, parent2):
+    mask = [random.randint(0, 1) for _ in range(len(parent1))]
+    child1, child2 = parent1[:], parent2[:]
+    for i in range(len(parent1)):
+        if mask[i] == 1:
+            child1[i] = parent2[i]
+            child2[i] = parent1[i]
+
+    return child1, child2
+
 def clear_number(text):
     return float(str(text).replace(" ", ""))
 
@@ -88,13 +110,17 @@ if __name__ == "__main__":
     data = pd.read_csv(args.data_file, sep='\t')
     data['Waga (kg)'] = data['Waga (kg)'].apply(clear_number)
     data['Wartość (zł)'] = data['Wartość (zł)'].apply(clear_number)
+    print("-" * 40)
     print(f"Wczytano {len(data)} wierszy z pliku: {args.data_file}")
+    print("-" * 40)
     print(data['Waga (kg)'])
+    print("-" * 40)
     print(data['Wartość (zł)'])
 
     population = generate_population(args.N, data.shape[0])
     chromosome = [1 if i == 1 else 0 for i in range(26)]
 
+    print("-" * 40)
     print("populacja: ", len(population))
     print("przystosowanie pierwszego chromosomu z populacji:", calculate_fitness(population[0], data.to_numpy()))
     print("fitness dla jednego przedmiotu w plecaku:", calculate_fitness(chromosome, data.to_numpy()))
@@ -111,5 +137,32 @@ if __name__ == "__main__":
 
     selected = roulette_selection(population, fitness_values)
 
-    print("Fitnessy:", fitness_values)
-    print("Wybrany chromosom:", selected[0])
+    print("-" * 40)
+    print("fitnessy:", fitness_values)
+    print("wybrany chromosom:", selected[0])
+
+    parent1 = [1, 0, 1, 0, 1, 0, 1, 0]
+    parent2 = [0, 1, 0, 1, 0, 1, 0, 1]
+
+    print("-" * 40)
+    print("rodzic 1:", parent1)
+    print("rodzic 2:", parent2)
+    print("-" * 40)
+
+    c1, c2 = one_point_crossover(parent1, parent2)
+    print("ONE-POINT CROSSOVER")
+    print("dziecko 1:", c1)
+    print("dziecko 2:", c2)
+    print("-" * 40)
+
+    c1, c2 = two_point_crossover(parent1, parent2)
+    print("TWO-POINT CROSSOVER")
+    print("dziecko 1:", c1)
+    print("dziecko 2:", c2)
+    print("-" * 40)
+
+    c1, c2 = uniform_crossover(parent1, parent2)
+    print("UNIFORM CROSSOVER")
+    print("dziecko 1:", c1)
+    print("dziecko 2:", c2)
+    print("-" * 40)
