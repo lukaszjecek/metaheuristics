@@ -1,5 +1,30 @@
 import pandas as pd
 import argparse
+import random
+
+MAX_WEIGHT = 6_404_180
+
+def generate_population(population_size, n_items):
+    population = []
+    for _ in range(population_size):
+        chromosome = [random.randint(0, 1) for _ in range(n_items)]
+        population.append(chromosome)
+    return population
+
+def calculate_fitness(chromosome, items):
+    weight = 0
+    value = 0
+    for idx,gene in enumerate(chromosome):
+        if gene == 1:
+            weight += items[idx][2]
+            value += items[idx][3]
+    if weight <= MAX_WEIGHT:
+        return value
+    else:
+        return 0
+
+def clear_number(text):
+    return float(str(text).replace(" ", ""))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -32,4 +57,15 @@ if __name__ == "__main__":
         parser.error("Liczba iteracji musi być większa od 0.")
 
     data = pd.read_csv(args.data_file, sep='\t')
+    data['Waga (kg)'] = data['Waga (kg)'].apply(clear_number)
+    data['Wartość (zł)'] = data['Wartość (zł)'].apply(clear_number)
     print(f"Wczytano {len(data)} wierszy z pliku: {args.data_file}")
+    print(data['Waga (kg)'])
+    print(data['Wartość (zł)'])
+
+    population = generate_population(args.N, data.shape[0])
+    chromosome = [1 if i == 1 else 0 for i in range(26)]
+
+    print("populacja: ", len(population))
+    print("przystosowanie pierwszego chromosomu z populacji:", calculate_fitness(population[0], data.to_numpy()))
+    print("fitness dla jednego przedmiotu w plecaku:", calculate_fitness(chromosome, data.to_numpy()))
