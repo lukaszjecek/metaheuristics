@@ -23,6 +23,35 @@ def calculate_fitness(chromosome, items):
     else:
         return 0
 
+def roulette_selection(population, fitness_values, n_selected=1):
+    total_fitness = sum(fitness_values)
+
+    # if every chromosome in the generated population has 0 fitness function value
+    # then every chromosome has equal 1/N probability to bo chosen
+    if total_fitness == 0:
+        probabilities = [1 / len(population)] * len(population)
+    else:
+        probabilities = [f / total_fitness for f in fitness_values]
+
+    # creates array of intervals from 0 to 1 for each chromosome represented in the roulette wheel
+    # f.e. 0.0 0.1, 0.1 0.4, 0.4 0.6 etc.
+    intervals = []
+    intervals_sum = 0
+    for p in probabilities:
+        intervals.append((intervals_sum, intervals_sum + p))
+        intervals_sum += p
+
+    #chooses random chromosome according to calculated probability
+    selected = []
+    for _ in range(n_selected):
+        r = random.random()
+        for idx, (low, high) in enumerate(intervals):
+            if low <= r < high:
+                selected.append(population[idx])
+                break
+
+    return selected
+
 def clear_number(text):
     return float(str(text).replace(" ", ""))
 
@@ -69,3 +98,18 @@ if __name__ == "__main__":
     print("populacja: ", len(population))
     print("przystosowanie pierwszego chromosomu z populacji:", calculate_fitness(population[0], data.to_numpy()))
     print("fitness dla jednego przedmiotu w plecaku:", calculate_fitness(chromosome, data.to_numpy()))
+
+    population = [
+        [0, 1, 0, 1],
+        [1, 1, 0, 0],
+        [0, 0, 1, 1],
+        [1, 0, 1, 0],
+        [1, 1, 1, 1]
+    ]
+
+    fitness_values = [10, 30, 20, 5, 1000]
+
+    selected = roulette_selection(population, fitness_values)
+
+    print("Fitnessy:", fitness_values)
+    print("Wybrany chromosom:", selected[0])
