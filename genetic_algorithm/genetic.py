@@ -51,6 +51,40 @@ def roulette_selection(population, fitness_values, n_selected=1):
 
     return selected
 
+def ranking_selection(population, fitness_values, n_selected=1):
+    indexed = list(zip(population, fitness_values))
+    indexed.sort(key=lambda x: x[1])
+
+    ranks = list(range(1, len(indexed) + 1))
+    total_rank = sum(ranks)
+
+    probabilities = [r / total_rank for r in ranks]
+    intervals = []
+    s = 0
+    for p in probabilities:
+        intervals.append((s, s + p))
+        s += p
+
+    selected = []
+    for _ in range(n_selected):
+        r = random.random()
+        for idx, (low, high) in enumerate(intervals):
+            if low <= r < high:
+                selected.append(indexed[idx][0])
+                break
+        else:
+            selected.append(indexed[-1][0])
+
+    return selected
+
+def tournament_selection(population, fitness_values, n_selected=1, tournament_size=4):
+    selected = []
+    for _ in range(n_selected):
+        participants_idx = random.sample(range(len(population)), tournament_size)
+        best_idx = max(participants_idx, key=fitness_values.__getitem__)
+        selected.append(population[best_idx])
+    return selected
+
 def one_point_crossover(parent1, parent2):
     pivot = random.randint(1, len(parent1) - 1)
     child1 = parent1[:pivot] + parent2[pivot:]
@@ -72,3 +106,13 @@ def uniform_crossover(parent1, parent2):
             child2[i] = parent1[i]
 
     return child1, child2
+
+def mutate_single_gene(chromosome):
+    idx = random.randrange(len(chromosome))
+    chromosome[idx] = 1 - chromosome[idx]
+    return chromosome
+
+def chromosome_all_gene_inversion(chromosome):
+    for idx in range(len(chromosome)):
+        chromosome[idx] = 1 - chromosome[idx]
+    return chromosome
