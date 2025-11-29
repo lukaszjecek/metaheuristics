@@ -12,13 +12,15 @@ def clear_number(text):
 def auto_tournament_size(population_size):
     return max(2, int(math.log2(population_size)))
 
-def selection(population, items, max_weight, method):
-    population_size = len(population)
-
+def fitness(population, items, max_weight):
     fitness_values = [
         calculate_fitness(chromosome, items, max_weight)
         for chromosome in population
     ]
+    return fitness_values
+
+def selection(population, fitness_values, method):
+    population_size = len(population)
 
     if method == "roulette":
         return roulette_selection(population, fitness_values, population_size)
