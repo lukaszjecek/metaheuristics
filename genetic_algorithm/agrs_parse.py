@@ -8,12 +8,12 @@ def parse_arguments():
     parser.add_argument('--N', type=int, default=30, help="Wielkość populacji")
     parser.add_argument('--T', type=int, default=300, help="Liczba iteracji")
     parser.add_argument('--selection_method', type=str, choices=["roulette", "ranking", "tournament"],
-                        help="Metoda selekcji nowego rodzica")
+                        default="roulette", help="Metoda selekcji nowego rodzica")
     parser.add_argument('--crossover_method', type=str, choices=["one_point", "two_point", "uniform"],
-                        help="Metoda krzyżowania w procesie tworzenia potomstwa")
+                        default="one_point", help="Metoda krzyżowania w procesie tworzenia potomstwa")
     parser.add_argument('--mutation_method', type=str, choices=["single_bit_flip", "all_bit_inversion"],
                         default="single_bit_flip", help="Metoda mutacji genów w chromosomie")
-    parser.add_argument('--data_file', type=str, default="problem plecakowy dane CSV tabulatory.csv",
+    parser.add_argument('--data_file', type=str, default="data/problem plecakowy dane CSV tabulatory.csv",
                         help="Plik csv z dostępnymi do włożenia do plecaka przedmiotami")
 
     args = parser.parse_args()

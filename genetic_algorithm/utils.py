@@ -1,6 +1,6 @@
 import math
 
-from genetic_algorithm.genetic import (
+from genetic import (
     one_point_crossover, two_point_crossover, uniform_crossover,
     mutate_single_gene, chromosome_all_gene_inversion, roulette_selection, ranking_selection, tournament_selection,
     calculate_fitness

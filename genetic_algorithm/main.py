@@ -2,9 +2,9 @@ import random
 
 import pandas as pd
 
-from genetic_algorithm.agrs_parse import parse_arguments
-from genetic_algorithm.genetic import generate_population
-from genetic_algorithm.utils import (
+from agrs_parse import parse_arguments
+from genetic import generate_population
+from utils import (
     clear_number, fitness, selection, crossover, mutate
 )
 
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     items['Wartość (zł)'] = items['Wartość (zł)'].apply(clear_number)
     items_array = items[['Waga (kg)', 'Wartość (zł)']].to_numpy()
 
-    population = generate_population(args.N, len(items))
+    population = generate_population(args.N, len(items_array))
     fitness_values = fitness(population, items_array, MAX_WEIGHT)
 
     for _ in range(args.T):
@@ -43,4 +43,11 @@ if __name__ == "__main__":
                 children[i] = mutate(children[i], args.mutation_method)
 
         population = children
-        fitness_values = fitness(population, items, MAX_WEIGHT)
+        fitness_values = fitness(population, items_array, MAX_WEIGHT)
+
+    best_idx = max(range(len(population)), key=fitness_values.__getitem__)
+    best_solution = population[best_idx]
+    best_value = fitness_values[best_idx]
+
+    print("Najlepsza wartość plecaka:", best_value)
+    print("Najlepszy chromosom:", best_solution)

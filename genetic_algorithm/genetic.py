@@ -12,8 +12,8 @@ def calculate_fitness(chromosome, items, max_weight):
     value = 0
     for idx,gene in enumerate(chromosome):
         if gene == 1:
-            weight += items[idx][2]
-            value += items[idx][3]
+            weight += items[idx][0]
+            value += items[idx][1]
     if weight <= max_weight:
         return value
     else:
