@@ -1,6 +1,9 @@
 # Metaheuristics
 
-This repository contains simple implementations of metaheuristic algorithms in Python.
+This repository contains implementations of selected metaheuristic algorithms in Python.
+It is intended for experimentation, comparison of methods, and educational purposes.
+
+Some algorithms are still under development.
 
 ## Algorithms
 
@@ -9,6 +12,13 @@ This repository contains simple implementations of metaheuristic algorithms in P
 
 - **Genetic Algorithm (GA)** – genetic algorithm for the knapsack problem.  
   See: [`genetic_algorithm/README.md`](genetic_algorithm/README.md)
+
+### Work in progress / planned
+
+- **Ant Colony Optimization (ACO)** – work in progress
+- **Particle Swarm Optimization (PSO)** – planned
+- **Vehicle Routing Problem with Time Windows (VRPTW)**  
+  To be solved using a selected metaheuristic (to be determined)
 
 ## Requirements
 
