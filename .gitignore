@@ -183,3 +183,5 @@ cython_debug/
 *.csv
 *.png
 *.txt
+!/ant_colony_optimization/data/A-n32-k5.txt
+!/ant_colony_optimization/data/A-n80-k10.txt
