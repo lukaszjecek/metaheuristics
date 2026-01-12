@@ -17,9 +17,12 @@ Some algorithms are still under development.
   + experiment runner (CSV summaries, convergence plots, tour visualization).  
   See: [`ant_colony_optimization/README.md`](ant_colony_optimization/README.md)
 
+- **Particle Swarm Optimization (PSO)** – particle swarm optimization for 2D test functions (Booth, Ackley)
+  + experiment runner (CSV summaries, convergence plots, swarm snapshot plots).  
+  See: [`particle_swarm_optimization/README.md`](particle_swarm_optimization/README.md)
+
 ### Work in progress / planned
 
-- **Particle Swarm Optimization (PSO)** – planned
 - **Vehicle Routing Problem with Time Windows (VRPTW)**  
   To be solved using a selected metaheuristic (to be determined)
 
