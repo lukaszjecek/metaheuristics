@@ -3,8 +3,6 @@
 This repository contains implementations of selected metaheuristic algorithms in Python.
 It is intended for experimentation, comparison of methods, and educational purposes.
 
-Some algorithms are still under development.
-
 ## Algorithms
 
 - **Simulated Annealing (SA)** – simulated annealing for test functions + convergence plots.  
@@ -21,10 +19,9 @@ Some algorithms are still under development.
   + experiment runner (CSV summaries, convergence plots, swarm snapshot plots).  
   See: [`particle_swarm_optimization/README.md`](particle_swarm_optimization/README.md)
 
-### Work in progress / planned
-
-- **Vehicle Routing Problem with Time Windows (VRPTW)**  
-  To be solved using a selected metaheuristic (to be determined)
+- **Vehicle Routing Problem with Time Windows (VRPTW)** – ant colony optimization for VRPTW (with 2-opt and relocate local search operators) using Solomon benchmark instances
+  + experiment runner (CSV summaries, convergence plots, route visualization).  
+  See: [`vrptw/README.md`](vrptw/README.md)
 
 ## Requirements
 
